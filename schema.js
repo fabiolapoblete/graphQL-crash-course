@@ -26,6 +26,14 @@ export const typeDefs = `#graphql
         authors: [Author]
         author(id: ID!): Author
     }
+    type Mutation {
+        deleteGame(id: ID!): [Game] #After a game with this id has been removed. Return the new list of games
+        addGame(game: AddGameInput): Game #return the single game created
+    }    
+    input AddGameInput { #Säger att detta inte är en viss typ av data utan en samling
+        title: String!
+        platform: [String]!
+    }
 `;
 
 //Query type måste finnas alltid.
