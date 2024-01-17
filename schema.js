@@ -1,3 +1,6 @@
+//A query type is always required
+//Different types in graphql: int, float, string, boolean, ID
+
 export const typeDefs = `#graphql
     type Game {
         id: ID!
@@ -28,14 +31,15 @@ export const typeDefs = `#graphql
     }
     type Mutation {
         deleteGame(id: ID!): [Game] #After a game with this id has been removed. Return the new list of games
-        addGame(game: AddGameInput): Game #return the single game created
+        addGame(game: AddGameInput): Game #Return the single game created
+        updateGame(id: ID!, edits: EditGameInput!): Game
     }    
-    input AddGameInput { #Säger att detta inte är en viss typ av data utan en samling
+    input AddGameInput { #This is a collection of data instead of a data type.
         title: String!
         platform: [String]!
     }
+    input EditGameInput {
+        title: String
+        platform: [String]
+    }
 `;
-
-//Query type måste finnas alltid.
-
-//typer i graphql: int, float, string, boolean, ID

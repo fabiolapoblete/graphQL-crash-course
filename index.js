@@ -1,9 +1,8 @@
-import { ApolloServer } from "@apollo/server"; //För att sätta upp servern
-import { startStandaloneServer } from "@apollo/server/standalone"; //För att starta upp servern
+import { ApolloServer } from "@apollo/server"; //For setting up the server
+import { startStandaloneServer } from "@apollo/server/standalone"; //For starting the server
 
-//db
+//Import of db and types
 import db from "./db.js";
-//types
 import { typeDefs } from "./schema.js";
 
 const resolvers = {
@@ -59,18 +58,27 @@ const resolvers = {
       db.games.push(game);
       return game;
     },
+    updateGame(_, args) {
+      db.games = db.games.map((game) => {
+        if (game.id === args.id) {
+          return { ...game, ...args.edits }; //If edits contain a key that exists in game it will be overwritten
+        }
+        return game;
+      });
+      return db.games.find((game) => game.id === args.id);
+    },
   },
 };
 
 //Server setup
-//typeDefs - förklaring över våra datatyper och relationen de har med andra datatyper.
-//resolvers - funktioner som säger hur vi svarar på queries för olika typ av data
+//typeDefs - explanation of the available data types och their relations to other data types
+//resolvers - functions that tells us how to respond to different queries
 const server = new ApolloServer({
   typeDefs,
   resolvers,
 });
 
-//Startar servern
+//Starting the server
 const { url } = await startStandaloneServer(server, {
   listen: { port: 4000 },
 });
